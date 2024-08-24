@@ -12,6 +12,7 @@ extern string data;//存储文件内容
 extern int totalNodes;//节点总数
 extern map<int, string> datas;//存储文件内容
 
+string UTF8ToGB(const char* str);//UTF8转GB，用于显示中文，因为Windows控制台默认不支持UTF8，所以需要转换，否则会乱码，直接抄的csdn代码，原文：https://blog.csdn.net/qq_36251561/article/details/107752098
 string readIn(int hangShu);// 读取输入
 void explainingWords(string str);// 解释词
 void showMenu();//显示菜单
@@ -22,7 +23,7 @@ void rewriteOut(string writeout);//重写文件
 int fastRead();//快速读取
 void performExitActions();//执行退出操作
 void reviewSlectedNode(int nodeNumber);//查看
-string UTF8ToGB(const char* str);//UTF8转GB，用于显示中文，因为Windows控制台默认不支持UTF8，所以需要转换，否则会乱码，直接抄的csdn代码，原文：https://blog.csdn.net/qq_36251561/article/details/107752098
+
 //局部变量
 int tmp;//临时变量，用于存储reviewSlectedNode函数中的节点编号
 
