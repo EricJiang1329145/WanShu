@@ -5,6 +5,7 @@
 #include <map>//映射
 #include <stdio.h>//标准输入输出
 #include <Windows.h>//控制台
+
 using namespace std;
 //全局变量
 extern string data;//存储文件内容
@@ -14,7 +15,6 @@ extern map<int, string> datas;//存储文件内容
 string readIn(int hangShu);// 读取输入
 void explainingWords(string str);// 解释词
 void showMenu();//显示菜单
-void mapping(int num, string str);//映射
 void mainLoop();//主循环
 void initialization();//初始化
 void guidingWords();//引导词
@@ -22,45 +22,39 @@ void rewriteOut(string writeout);//重写文件
 int fastRead();//快速读取
 void performExitActions();//执行退出操作
 void reviewSlectedNode(int nodeNumber);//查看
-
+string UTF8ToGB(const char* str);//UTF8转GB，用于显示中文，因为Windows控制台默认不支持UTF8，所以需要转换，否则会乱码，直接抄的csdn代码，原文：https://blog.csdn.net/qq_36251561/article/details/107752098
 //局部变量
 int tmp;//临时变量，用于存储reviewSlectedNode函数中的节点编号
 
 //函数定义
 string readIn(int hangShu) {//读取指定行
-    ifstream infile("trees.txt"); //打开文件
+    ifstream infile("D:\\Dev\\WanShu\\trees.txt"); //打开文件
     if (infile.is_open()) { //如果文件打开成功
+        explainingWords("文件打开成功！");
         string line;//存储每一行的内容
         while (getline(infile, line)) {//读取每一行
             hangShu--;//行数减一
             if (hangShu == 0) {//如果行数等于0
-                return line;//返回这一行的内容
+                string str = UTF8ToGB(line.c_str()).c_str();
+                return str;//返回这一行的内容
             }
         }
         infile.close();//关闭文件
     }
     else {
-        cout << "Unable to open file" << std::endl;
+        explainingWords("文件打开失败！");
     }
     return "0";
 }
 void explainingWords(string str) {
-    std::cout << str << std::endl;
+    cout << str << endl;
     return;
 }
 void showMenu() {
-    std::cout << "以下是菜单：\n1 查看菜单\n2 查看指定位置的内容\n3 编辑(覆盖）指定位置的内容\n4 查看映射表大小\n-1 退出程序 ";
+    explainingWords("以下是菜单：\n1 查看菜单\n2 查看指定位置的内容\n3 编辑(覆盖）指定位置的内容\n4 查看映射表大小\n-1 退出程序 ");
     return;
 }
-void mapping(int num, string str) {
-    if (str == "") {
-        cout << "输入为空，请重新输入" << endl;
-    }
-    else {
-        datas[num] = str;
-    }
-    return;
-}
+
 void mainLoop() {
     int operationCode;//操作代码
     while (true) {
@@ -118,7 +112,7 @@ void initialization() {
     //初始化映射表
     datas[1] = "root";
     int lineNumber;
-    freopen("trees.txt", "r", stdin);//将标准输入重定向到文件
+    freopen("D:\\Dev\\WanShu\\trees.txt", "r", stdin);//将标准输入重定向到文件
     cin >> lineNumber;
     for (int i = 1; i <= lineNumber; i++) {
         cin >> datas[i+1];
@@ -129,8 +123,22 @@ void initialization() {
 
     return;
 }
+void initialization2() {
+    //初始化映射表
+    datas[1] = "root";
+    int lineNumber;
+    lineNumber = stoi(readIn(1));
+    int i=2;
+    while (i <= lineNumber + 1) {
+        datas[i] = readIn(i);
+        i++;
+    }
+
+    explainingWords("映射表初始化成功！\n");
+    return;
+}
 void guidingWords() {
-    cout << "欢迎来到万树！这是一个帮助人们重建记忆的项目。\n万树使用“树（编程中的一个概念）”来使事情更具逻辑性。\n要使用万树，您需要使用操作代码。\n输入“1”以查看菜单，您也可以输入“-1”退出程序。";
+    explainingWords("欢迎来到万树！这是一个帮助人们重建记忆的项目。\n万树使用“树（编程中的一个概念）”来使事情更具逻辑性。\n要使用万树，您需要使用操作代码。\n输入“1”以查看菜单，您也可以输入“-1”退出程序。");
     return;
 }
 void rewriteOut(string writeout) {
@@ -138,10 +146,10 @@ void rewriteOut(string writeout) {
     if (outfile.is_open()) {
         outfile << writeout << endl;
         outfile.close();
-        cout << "File wroted successfully" << endl;
+        explainingWords("文件写入成功！");
     }
     else {
-        cout << "Unable to open file" << endl;
+        explainingWords("文件写入失败！");
     }
     return;
 }
@@ -164,4 +172,25 @@ int fastRead() {
 void performExitActions() {
     explainingWords("感谢使用万树！期待下次再见。");
     return;
+}
+string UTF8ToGB(const char* str){
+    string result;
+    WCHAR* strSrc;
+    LPSTR szRes;
+
+    //获得临时变量的大小
+    int i = MultiByteToWideChar(CP_UTF8, 0, str, -1, NULL, 0);
+    strSrc = new WCHAR[i + 1];
+    MultiByteToWideChar(CP_UTF8, 0, str, -1, strSrc, i);
+
+    //获得临时变量的大小
+    i = WideCharToMultiByte(CP_ACP, 0, strSrc, -1, NULL, 0, NULL, NULL);
+    szRes = new CHAR[i + 1];
+    WideCharToMultiByte(CP_ACP, 0, strSrc, -1, szRes, i, NULL, NULL);
+
+    result = szRes;
+    delete[]strSrc;
+    delete[]szRes;
+
+    return result;
 }
