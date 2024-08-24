@@ -51,7 +51,7 @@ void explainingWords(string str) {
     return;
 }
 void showMenu() {
-    explainingWords("以下是菜单：\n1 查看菜单\n2 查看指定位置的内容\n3 编辑(覆盖）指定位置的内容\n4 查看映射表大小\n-1 退出程序 ");
+    explainingWords("以下是菜单：\n1 查看菜单\n2 查看/编辑（覆盖）指定位置的内容\n3 查看映射表大小\n-1 退出程序 ");
     return;
 }
 
@@ -67,6 +67,10 @@ void mainLoop() {
         case 2:
             reviewSlectedNode(-2);
             break;
+        case 3:
+            explainingWords("映射表大小为：" +to_string(datas.size()));
+            break;
+
         case -1:
             explainingWords("退出成功！");
             return;
@@ -77,7 +81,7 @@ void mainLoop() {
 }
 void reviewSlectedNode(int nodeNumber) {
     if(nodeNumber == -2){
-        explainingWords("请输入您要查看的节点编号：（返回上一层输入-1）\n");
+        explainingWords("请输入您要查看/编辑的节点编号：（返回上一层输入-1）\n");
         nodeNumber = fastRead();
     }
     else if (nodeNumber == -3) {
@@ -107,23 +111,6 @@ void reviewSlectedNode(int nodeNumber) {
     return;
 }
 void initialization() {
-    //SetConsoleOutputCP(936);//设置控制台输出编码为简体中文
-    //explainingWords("控制台编码已设置为简体中文!\n");
-    //初始化映射表
-    datas[1] = "root";
-    int lineNumber;
-    freopen("D:\\Dev\\WanShu\\trees.txt", "r", stdin);//将标准输入重定向到文件
-    cin >> lineNumber;
-    for (int i = 1; i <= lineNumber; i++) {
-        cin >> datas[i+1];
-    }
-    explainingWords("映射表初始化成功！\n");
-
-    fclose(stdin);//关闭文件
-
-    return;
-}
-void initialization2() {
     //初始化映射表
     datas[1] = "root";
     int lineNumber;
