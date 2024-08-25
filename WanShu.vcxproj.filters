@@ -15,16 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="C:\Users\Kevin-12\Desktop\cs\wanshu\trees.txt">
-      <Filter>资源文件</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="C:\Users\Kevin-12\Desktop\cs\wanshu\index.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
     <ClCompile Include="Log.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="trees.txt">
+      <Filter>资源文件</Filter>
+    </Text>
   </ItemGroup>
 </Project>

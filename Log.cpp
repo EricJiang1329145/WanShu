@@ -8,28 +8,28 @@
 
 using namespace std;
 //全局变量
-extern string data;//存储文件内容
 extern int totalNodes;//节点总数
 extern map<int, string> datas;//存储文件内容
 
 string UTF8ToGB(const char* str);//UTF8转GB，用于显示中文，因为Windows控制台默认不支持UTF8，所以需要转换，否则会乱码，直接抄的csdn代码，原文：https://blog.csdn.net/qq_36251561/article/details/107752098
 string readIn(int hangShu);// 读取输入
+void ModifyLineData(int lineNum, string lineData);//修改指定行
 void explainingWords(string str);// 解释词
 void showMenu();//显示菜单
 void mainLoop();//主循环
 void initialization();//初始化
 void guidingWords();//引导词
-void rewriteOut(string writeout);//重写文件
 int fastRead();//快速读取
 void performExitActions();//执行退出操作
 void reviewSlectedNode(int nodeNumber);//查看
+void createNewNode();//新建节点
 
 //局部变量
 int tmp;//临时变量，用于存储reviewSlectedNode函数中的节点编号
-
+const char *filePath = "D:\\Dev\\WanShu\\trees.txt";
 //函数定义
 string readIn(int hangShu) {//读取指定行
-	ifstream infile("D:\\Dev\\WanShu\\trees.txt"); //打开文件
+	ifstream infile(filePath); //打开文件
 	if (infile.is_open()) { //如果文件打开成功
 		explainingWords("文件打开成功！");
 		string line;//存储每一行的内容
@@ -47,12 +47,43 @@ string readIn(int hangShu) {//读取指定行
 	}
 	return "0";
 }
+
+//从博客园粘贴并修改的代码，原文：https://www.cnblogs.com/xiaohai123/p/13663026.html
+void ModifyLineData(int lineNum, string lineData) {
+	ifstream in;
+	in.open(filePath);
+	string strFileData = "";
+	int line = 1;
+	string tmpLineData = "";
+	while (getline(in, tmpLineData)) {
+		if (line == lineNum) {
+			strFileData += lineData;
+			strFileData += "\n";
+		}
+		else {
+			strFileData += tmpLineData;
+			strFileData += "\n";
+		}
+		line++;
+	}
+	in.close();
+	//写入文件
+	ofstream out;
+	out.open(filePath);
+	out.flush();
+	out << strFileData;
+	out.close();
+	return;
+}
+
 void explainingWords(string str) {
 	cout << str << endl;
 	return;
 }
+
+
 void showMenu() {
-	explainingWords("以下是菜单：\n1 查看菜单\n2 查看/编辑（覆盖）指定位置的内容\n3 查看映射表大小\n-1 退出程序 ");
+	explainingWords("以下是菜单：\n1 查看菜单\n2 查看/编辑（覆盖）指定位置的内容\n3 查看映射表大小\n4 新建节点\n-1 退出程序 ");
 	return;
 }
 
@@ -71,7 +102,9 @@ void mainLoop() {
 		case 3:
 			explainingWords("映射表大小为：" + to_string(datas.size()));
 			break;
-
+		case  4:
+			createNewNode();
+			break;
 		case -1:
 			explainingWords("退出成功！");
 			return;
@@ -90,6 +123,8 @@ void reviewSlectedNode(int nodeNumber) {
 		explainingWords("请输入覆写内容：");
 		cin >> datas[tmp];
 		explainingWords("覆写成功！");
+		ModifyLineData(tmp, datas[tmp]);
+		explainingWords("修改文件成功！");
 		return;
 	}
 	if (nodeNumber == -1) {
@@ -101,7 +136,7 @@ void reviewSlectedNode(int nodeNumber) {
 		explainingWords("已为您找到节点编号为");
 		cout << nodeNumber;
 		explainingWords("的节点,\n");
-		explainingWords("您所查看的节点内容为：" + datas[nodeNumber] + "\n");
+		explainingWords("您所查看的节点内容为：\n" + datas[nodeNumber] + "\n");
 		explainingWords("继续搜索请直接输入节点编号，编辑当前内容请输入-3，返回上一层输入-1。\n请输入：\n");
 		reviewSlectedNode(fastRead());
 	}
@@ -114,10 +149,9 @@ void reviewSlectedNode(int nodeNumber) {
 void initialization() {
 	//初始化映射表
 	datas[1] = "root";
-	int lineNumber;
-	lineNumber = stoi(readIn(1));
+	totalNodes = stoi(readIn(1));
 	int i = 2;
-	while (i <= lineNumber + 1) {
+	while (i <= totalNodes + 1) {
 		datas[i] = readIn(i);
 		i++;
 	}
@@ -129,18 +163,7 @@ void guidingWords() {
 	explainingWords("欢迎来到万树！这是一个帮助人们重建记忆的项目。\n万树使用“树（编程中的一个概念）”来使事情更具逻辑性。\n要使用万树，您需要使用操作代码。\n输入“1”以查看菜单，您也可以输入“-1”退出程序。");
 	return;
 }
-void rewriteOut(string writeout) {
-	ofstream outfile("trees.txt");
-	if (outfile.is_open()) {
-		outfile << writeout << endl;
-		outfile.close();
-		explainingWords("文件写入成功！");
-	}
-	else {
-		explainingWords("文件写入失败！");
-	}
-	return;
-}
+
 int fastRead() {
 	int num = 0, f = 1;
 	char c = getchar();
@@ -159,6 +182,17 @@ int fastRead() {
 }
 void performExitActions() {
 	explainingWords("感谢使用万树！期待下次再见。");
+	return;
+}
+void createNewNode() {
+	explainingWords("当前有：" + to_string(totalNodes) + "个节点");
+	explainingWords("新节点的编号将是："+to_string(totalNodes+1));
+	explainingWords("请输入新节点的数据：");
+	cin >> datas[totalNodes + 1];
+    totalNodes++;
+	ModifyLineData(totalNodes, datas[totalNodes]);
+	explainingWords("创建成功！数据为：\n"+datas[totalNodes]);
+	ModifyLineData(1, to_string(totalNodes));
 	return;
 }
 string UTF8ToGB(const char* str) {

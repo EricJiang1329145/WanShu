@@ -127,11 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="C:\Users\Kevin-12\Desktop\cs\wanshu\trees.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="C:\Users\Kevin-12\Desktop\cs\wanshu\index.cpp" />
     <ClCompile Include="Log.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="trees.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
